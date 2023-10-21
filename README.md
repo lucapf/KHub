@@ -1,25 +1,23 @@
 # KHub
 
-Welcome to KHub.
+> Introducing another Kafka management system for microservices applications running on Kubernetes.
 
-KHub aim is to help management and monitoring of Kafka queues and connectors.
-KHub lives inside the application as every other micro-service/pod.
-Khub has no dependencies with external systems. Everything you need is
+What Khub does:
 
-- Configuration (configmap)
-- A persistent volume
+- Centralize configuration and management of all kafka resources (i.e. topics and sink/source connectors...)
+- Continuously check the cluster desired status and, if they diverges, sends alarms (standard logs, Prometheus)
+- Provides all required producer/consumer configurations  via rest api call
 
- what Khub does:
+KHub is easy to adopt:
 
-- create/configure all needed components (topics and sink/source connectors)
-- provides all required configuration via rest
-- continuously check the cluster desired status and, if they diverges, sends alarms (standard logs, Prometheus)
+- Runs inside the application as every other micro-service.
+- Requires (almost) no configuration and less resources
 
 ## Motivation
 
 Modern systems are running hundreds of micro-services and most of them are connected to many topics.
 
-Both consumers and producers need to read from the same topic (ex. `topic-X`) and someone needs to create that topic.
+Both consumers and producers need to read from the same topic and someone needs to create that topic.
 
 ## Who is calling `newTopic`?
 
@@ -27,7 +25,7 @@ In most of the enterprise environment `auto.create.topics.enable = true` is not 
 
 We don't want dependencies between consumers and producers.
 
-To fix this a usual approach is: the `newTopic("topic-X")` call for the same topic needs to be present in both consumers and producers, leads to code duplication and unclear responsibility for that action.
+To fix this a usual approach is: the `newTopic("topic-X")` call for the same topic needs to be present in both consumers and producers. This leads to code duplication and unclear responsibility for that action.
 
 Another drawback is, at startup, every micro-service for all topics in its configuration requests a new topic to be created. This leads unnecessary requests and not clear ownership over the action.
 
@@ -57,3 +55,10 @@ Internal micro-services typically use standard configurations shared across the 
 
 - A centralized UI/rest based system to manage topics
 - A system to inspect the content/executing query/filters....
+
+## Minimal dependencies
+
+Khub has no dependencies with external systems. Everything you need is
+
+- Configuration (configmap)
+- A persistent volume
